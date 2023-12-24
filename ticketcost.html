@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ticket Booking</title>
+    <style>
+        body {
+            background-image: url(ticketbook.jpg);
+            font-family: garamond, sans-serif;
+            text-align: center;
+            background-color: whitesmoke;
+
+        }
+
+        .container {
+            margin-top: 20px;
+            padding: 8px;
+            margin: 8px;
+        
+        }
+
+        .ticket {
+            border: 1px solid black;
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+        }
+        button{
+            padding: 5px;
+            background-color:red;
+            color: white;
+            font-family: garamond;
+            font-size: 18px;
+            border-radius: 12px;
+            border: 1px solid white;
+        }
+        h1{
+           font-family: garamond;
+            color: black;
+            font-size: 39px;  
+        }
+        h2{
+            font-family: garamond;
+            color: white;
+            font-size: 22px;
+        }
+        h3{
+            font-family: garamond;
+            color: black;
+            font-size: 22px;
+        }
+        h4{
+        font-family: garamond;
+        color: black;
+        font-size: 22px;   
+        }
+        p{
+            font-family: garamond;
+            color: white;
+            font-size: 22px;
+        }
+        .ticket input{
+            border-radius: 10px;
+
+        }
+        .container1{
+            background-color: black;
+            border-radius: 10px;
+            color: white;
+        }
+       .container2{
+        background-color: black;
+        border-radius: 10px;
+        color: white;
+        }
+        .details{
+            background-color: black;
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Football Match Ticket Booking</h1>
+
+    <div class="container">
+        <h1>Select Your Tickets</h1>
+        <div class="image">
+            <img src="Images/stadiumlayout.png">
+        </div>
+        <div class="ticket">
+            <h3>Category 1 Ticket</h3>
+            <h4>Price: ₹25000</h4>
+            <input type="text" id="category1Quantity" value="0" min="0">
+        </div>
+
+        <div class="ticket">
+            <h3>Category 2 Ticket</h3>
+            <h4>Price: ₹75000</h4>
+            <input type="text" id="category2Quantity" value="0" min="0">
+        </div>
+
+        <div class="ticket">
+            <h3>Category 3 Ticket</h3>
+            <h4>Price: ₹100000</h4>
+            <input type="text" id="category3Quantity" value="0" min="0">
+        </div>
+
+        <div class="ticket">
+            <h3>Category 4 Ticket</h3>
+            <h4>Price: ₹150000</h4>
+            <input type="text" id="category4Quantity" value="0" min="0">
+        </div>
+    </div>
+
+    <div class="container1">
+        <br>
+        <button onclick="calculateTotal()">Calculate Total</button>
+        <h2>Total Cost</h2>
+        <p id="totalCost">₹0</p>
+        <p id="discountMessage"></p>
+    </div>
+
+    
+    <div class="container2">
+        <h2>Allocated Seats</h2>
+        <p id="allocatedSeats">Allocated seats are:</p>
+    </div>
+
+    <div class="details">
+        <form method=POST action="http://localhost/demo/ticketcost.php">
+        <h2>Provide Details: </h2>
+        <div class="detailsinput">
+            <input type="text" name="firstname" placeholder="First Name" onfocus="inputColor(this)"><br>
+            <input type="text" name="lastname" placeholder="Last Name" onfocus="inputColor(this)"><br>
+            <input type="text" name="email" placeholder="E-Mail" onkeypress="reminder(this)"><br>
+        </div>
+        <br>
+    <button>Proceed</button>
+</form>
+
+  <script>
+    function calculateTotal() {
+        const category1Quantity = parseInt(document.getElementById("category1Quantity").value);
+        const category2Quantity = parseInt(document.getElementById("category2Quantity").value);
+        const category3Quantity = parseInt(document.getElementById("category3Quantity").value);
+        const category4Quantity = parseInt(document.getElementById("category4Quantity").value);
+
+        const category1Price = 25000;
+        const category2Price = 75000;
+        const category3Price = 100000;
+        const category4Price = 150000;
+
+        const totalCost = category1Quantity * category1Price +
+            category2Quantity * category2Price +
+            category3Quantity * category3Price +
+            category4Quantity * category4Price;
+
+            const maxSeats = 720;
+         const totalSeats =category1Quantity+category2Quantity+category3Quantity+category4Quantity;
+         if(totalSeats > maxSeats){
+            alert("No seats available");
+         }
+
+        let discount = 0;
+
+        if (totalCost > 150000) {
+            discount = 0.2 * totalCost;
+            document.getElementById("discountMessage").textContent = `You received a 20% discount of ₹${discount.toFixed(2)}.`;
+        } else {
+            document.getElementById("discountMessage").textContent = '';
+        }
+
+        const discountedTotal = totalCost - discount;
+
+        document.getElementById("totalCost").textContent = `Total Cost: ₹${discountedTotal.toFixed(2)}`;
+
+         const categoryQuantities = [category1Quantity, category2Quantity, category3Quantity, category4Quantity];
+        let allocatedSeats = "";
+
+        for (let i = 0; i < categoryQuantities.length; i++) {
+            allocatedSeats += `Category ${i + 1}: ${categoryQuantities[i]} seat(s)`;
+
+            if (i < categoryQuantities.length - 1) {
+                allocatedSeats += ", ";
+        }
+    }
+
+        document.getElementById("allocatedSeats").textContent = allocatedSeats;
+    }
+</script>
+
+</body>
+
+</html>
